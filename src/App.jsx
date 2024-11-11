@@ -1,13 +1,19 @@
-import './App.css'
+import Navbar from './components/Navbar';
+import Rightbar from './components/Rightbar';
+import SectionFilms from './components/SectionFilms';
+import './App.css';
 
 function App() {
 
 
   return (
     <>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
+      <Navbar />
+      <div className="flex h-[calc(100vh-3rem)] md:h-full md:w-10/12">
+        <SectionFilms />
+        <Rightbar />
+      </div>
+
     </>
   )
 }
