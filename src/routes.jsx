@@ -9,27 +9,32 @@ export const routes = [
     {
         id: 1,
         path: '/',
-        element: <Home />
+        element: <Home />,
+        label: 'Home',
     },
     {
         id: 2,
         path: '/movies',
-        element: <Movies />
+        element: <Movies />,
+        label: 'Movies',
     },
     {
         id: 3,
         path: '/series',
-        element: <Series />
+        element: <Series />,
+        label: 'Series',
     },
     {
         id: 4,
         path: '/comingSoon',
-        element: <ComingSoon />
+        element: <ComingSoon />,
+        label: 'Coming Soon',
     },
     {
         id: 5,
         path: '/watchList',
-        element: <WatchList />
+        element: <WatchList />,
+        label: 'WatchList',
     },
     {
         path: '*',

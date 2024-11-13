@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { routes } from '../routes';
 import title from '../assets/NBflix.png';
 const Navbar = () => {
     const [isDarkMode, setIsDarkMode] = useState(false);
     const [isSideMenu, SetIsSideMenu] = useState(false);
-
+    const location = useLocation();
     useEffect(() => {
         if (isDarkMode) {
             document.documentElement.classList.add('dark')
@@ -27,41 +28,46 @@ const Navbar = () => {
 
 
     return (
-        <nav className='flex justify-between md:flex-col p-2 w-screen h-12 md:w-40 lg:w-60 md:h-full border-r border-r-gray-100 dark:border-r-gray-950'>
-            <figure className='hidden md:block  min-w-24'>
+        <nav className='flex md:flex-col w-screen h-12 md:w-40 lg:w-60 md:h-full border-r border-r-gray-100 dark:border-r-gray-950'>
+            <figure className='hidden md:block min-w-24'>
                 <img src={title} alt="" />
+                <hr />
             </figure>
             <button onClick={openSideMenu} className='md:hidden'><i className="fa-solid fa-bars text-2xl"></i></button>
 
-
-
-
-            <section>
-                <div>
-                    <p>Menu</p>
+            <section className='pt-6 hidden md:block justify-start text-lightText dark:text-darkText'>
+                <div className='py-3'>
+                    <p className='pb-3 pl-6 text-gray-600 dark:text-gray-400'>Menù</p>
                     <ul>
-                        <li><Link to={'/'}>Home</Link></li>
-                        <li><Link to={'/watchList'}>Watchlist</Link></li>
-                        <li><Link to={'/comingSoon'}>Coming Soon</Link></li>
+                        {
+                            routes.filter(el => el.label == 'Home' || el.label == 'Coming Soon' || el.label == 'WatchList').map(route => {
+                                return (
+                                    <Link key={route.id} to={route.path}>
+                                        <li className={`pl-12 hover:border-l-orange-600 hover:border-l-2 ${location.pathname === route.path ? 'text-xl border-l-orange-600 border-l-2' : ''}`}>{route.label}</li>
+                                    </Link>
+                                )
+                            })
+
+                        }
                     </ul>
                 </div>
-                <div>
-                    <p>Social</p>
+                <div className='py-3'>
+                    <p className='pb-3 pl-6 text-gray-600 dark:text-gray-400'>Social</p>
                     <ul>
-                        <li>Friends</li>
-                        <li>Parties</li>
+                        <li className='pl-12 hover:border-l-orange-600 hover:border-l-2'>Friends</li>
+                        <li className='pl-12 hover:border-l-orange-600 hover:border-l-2'>Parties</li>
                     </ul>
                 </div>
-                <div>
-                    <p>General</p>
+                <div className='py-3'>
+                    <p className='pb-3 pl-6 text-gray-600 dark:text-gray-400'>General</p>
                     <ul>
-                        <li>Settings</li>
-                        <li>Log out</li>
+                        <li className='pl-12 hover:border-l-orange-600 hover:border-l-2'>Settings</li>
+                        <li className='pl-12 hover:border-l-orange-600 hover:border-l-2'>Log out</li>
                     </ul>
                 </div>
             </section>
 
-            <div className='rounded-full p-1 mx-0 md:mx-auto w-16 h-8 bg-primary dark:bg-primaryDark'>
+            <div className='rounded-full p-1 mt-auto ml-auto md:mx-auto w-16 h-8 bg-primary dark:bg-primaryDark'>
                 <motion.button
                     className='rounded-full bg-white w-6/12 h-6 text-lightText'
                     onClick={toggleDarkMode}
