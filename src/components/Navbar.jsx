@@ -24,7 +24,7 @@ const Navbar = () => {
 
 
     return (
-        <nav className='flex md:flex-col w-screen h-12 md:w-60 md:h-full border-r border-r-gray-100 dark:border-r-gray-950'>
+        <nav className='flex md:flex-col w-screen h-12 md:w-60 md:h-full px-2 md:p-0 border-r border-r-gray-100 dark:border-r-gray-950'>
             <figure className='hidden md:block min-w-24 p-3'>
                 <img src={title} alt="" />
                 <hr />
