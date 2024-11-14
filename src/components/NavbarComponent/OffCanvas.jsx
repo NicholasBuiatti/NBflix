@@ -10,7 +10,7 @@ const OffCanvasMenu = ({ setIsSideMenu }) => {
     return (
         <>
             <motion.div
-                className="fixed md:hidden top-0 left-0 z-10 h-screen overflow-y-auto w-full sm:w-6/12 bg-gradient-to-b from-white to-rose-100 dark:from-black dark:to-red-900 text-center sm:text-start text-xl sm:text-base"
+                className="fixed md:hidden top-0 left-0 z-50 h-screen overflow-y-auto w-full sm:w-6/12 bg-gradient-to-b from-white to-rose-100 dark:from-black dark:to-red-900 text-center sm:text-start text-xl sm:text-base"
                 initial={{ x: '-100%' }} // Inizializza a sinistra (fuori schermo)
                 animate={{ x: 0 }} // Scivola nella vista
                 exit={{ x: '-100%' }} // Fuori schermo a sinistra
