@@ -57,7 +57,7 @@ const Carousel = ({ type, apiKey }) => {
                     >
                         <img
                             src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
-                            className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                            className="absolute block w-full h-full object-cover -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                             alt={`Slide ${index + 1}`}
                         />
 
