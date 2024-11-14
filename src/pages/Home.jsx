@@ -2,86 +2,42 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { motion } from 'framer-motion';
 import Carousel from '../components/Carousel';
+import ListMovies from '../components/ListMovies';
 
 const Home = () => {
-    const [movies, setMovies] = useState([])
+    const apiKey = import.meta.env.VITE_API_KEY;
     const [search, setSerach] = useState('')
     const [type, setType] = useState('movie')
-    const [firstVisible, setFirstVisible] = useState(0)
-    const [lastVisible, setLastVisible] = useState(5)
-    const apiKey = import.meta.env.VITE_API_KEY;
 
-    const getMovies = async () => {
-        try {
-            const response = await axios.get(`https://api.themoviedb.org/3/discover/${type}?api_key=${apiKey}&with_production_countries=US,IT,GB&with_original_language=en&language=it-IT&page=1`)
-            const movies = response.data.results
-            // console.log(movies);
-            setMovies(movies)
 
-        } catch (error) {
-            console.log(error);
-
-        }
-    }
-
-    const visible = (indice) => {
-        return indice >= firstVisible && indice <= lastVisible;
-    }
-
-    useEffect(() => {
-        getMovies()
-    }, [type])
 
     const searchBar = (e) => {
         setSerach(e.target.value)
     }
 
-    const back = () => {
-        setLastVisible((prevLastVisible) => prevLastVisible - 1)
-        setFirstVisible((prevFirstVisible) => prevFirstVisible - 1)
-    }
-
-    const next = () => {
-        setLastVisible((prevLastVisible) => prevLastVisible + 1)
-        setFirstVisible((prevFirstVisible) => prevFirstVisible + 1)
-    }
-
     return (
-        <div className='w-11/12 overflow-auto'>
+        <div className='w-11/12 overflow-auto p-4'>
             {/* mainHeader */}
-            <section className='flex p-3'>
+            <section className='flex'>
                 <div>
-                    <label htmlFor="movies">Movies</label>
-                    <input type="radio" id='movies' name='seriesOrMovies' value='movie' checked={type === 'movie'} onChange={() => setType('movie')} />
-                    <label htmlFor="series">Series</label>
-                    <input type="radio" id='series' name='seriesOrMovies' value='tv' checked={type === 'tv'} onChange={() => setType('tv')} />
+                    <label htmlFor="movies" className='text-xl mr-2 cursor-pointer'>Movies</label>
+                    <input type="radio" id='movies' className='hidden' name='seriesOrMovies' value='movie' checked={type === 'movie'} onChange={() => setType('movie')} />
+                    <label htmlFor="series" className='text-xl mx-2 cursor-pointer'>Series</label>
+                    <input type="radio" id='series' className='hidden' name='seriesOrMovies' value='tv' checked={type === 'tv'} onChange={() => setType('tv')} />
+                    <div className='relative border-2 bg-gray-300 dark:border-red-800 rounded-full'>
+                        <motion.div className="absolute h-1.5 w-1/2 bg-gray-300 dark:bg-red-700 rounded-full" initial={{ y: '-50%' }} animate={{ x: type === 'movie' ? '-5%' : '105%' }} transition={{ type: 'spring', stiffness: 300, damping: 50 }}>
+                        </motion.div>
+                    </div>
                 </div>
-
                 <input type="text" onChange={searchBar} value={search} placeholder='Search' className='mx-auto border-2 px-2' />
             </section>
-
-            {/* Carousel */}
             <section>
+
                 <Carousel type={type} apiKey={apiKey} />
             </section>
 
-
-
-            <div className='flex'>
-                <button type='button' onClick={back} className='p-2 bg-orange-400' disabled={firstVisible === 0}>Back</button>
-                {movies.filter((movie, index) => visible(index)).map(el => {
-                    return type == 'movie' ? (
-
-                        <Card type={type} key={el.id} el={el} />
-
-
-                    ) : (
-                        <Card type={type} key={el.id} el={el} />
-                    );
-                })
-                }
-                <button type='button' onClick={next} className='p-2 bg-orange-400' disabled={lastVisible === movies.length - 1}>Next</button>
-            </div>
+            <h1 className='text-4xl font-bold mt-10 mb-5'>TOP RATED</h1>
+            <ListMovies apiKey={apiKey} type={type} />
         </div>
     )
 }
@@ -113,24 +69,6 @@ const Home = () => {
                 </span>
             </button> */}
 
-const Card = ({ el, type }) => {
-    const baseImg = 'https://image.tmdb.org/t/p/w200';
-    return (
-        <>
-            <div className='relative'>
-                <figure>
-                    <img src={`${baseImg}${el.poster_path}`} alt="" />
-                </figure>
-                {
-                    type === 'movie' ?
-                        <h1 className='absolute top-0'>{el.title}</h1>
-                        :
-                        <h1 className='absolute top-0'>{el.name}</h1>
-                }
 
-            </div>
-        </>
-    )
-}
 
 export default Home
