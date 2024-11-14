@@ -9,16 +9,18 @@ const Home = () => {
     const [search, setSerach] = useState('')
     const [type, setType] = useState('movie')
 
-
+    const [isSearchTab, setIsSearchTab] = useState(false)
 
     const searchBar = (e) => {
         setSerach(e.target.value)
     }
+    console.log(isSearchTab);
 
     return (
-        <div className='w-full overflow-auto p-4'>
+        <div className='relative w-full overflow-auto p-4'>
             {/* mainHeader */}
             <section className='flex'>
+
                 <div>
                     <label htmlFor="movies" className='text-xl mr-2 cursor-pointer'>Movies</label>
                     <input type="radio" id='movies' className='hidden' name='seriesOrMovies' value='movie' checked={type === 'movie'} onChange={() => setType('movie')} />
@@ -29,12 +31,19 @@ const Home = () => {
                         </motion.div>
                     </div>
                 </div>
-                <input type="text" onChange={searchBar} value={search} placeholder='Search' className='mx-auto border-2 px-2' />
-            </section>
-            <section>
 
-                <Carousel type={type} apiKey={apiKey} />
+
+                <input type="text" onChange={searchBar} value={search} onClick={() => setIsSearchTab(true)} placeholder='Search' className='mx-auto border-2 px-2' />
+
+                <section className={`fixed top-0 left-0 w-full h-3/4 z-40 bg-black/95 ${isSearchTab ? '' : 'hidden'}`}>
+                    <input type="text" value={search} onChange={searchBar} />
+                    <button type='button' onClick={() => setIsSearchTab(false)} className='text-white p-2 bg-slate-300 mx-2'>x</button>
+                </section>
             </section>
+
+
+            <Carousel type={type} apiKey={apiKey} />
+
 
             <h1 className='text-xl sm:text-2xl md:text-4xl font-bold mt-10 mb-5'>TOP RATED</h1>
             <ListMovies apiKey={apiKey} type={type} which='top_rated' />
