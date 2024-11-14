@@ -16,7 +16,7 @@ const Home = () => {
     }
 
     return (
-        <div className='w-11/12 overflow-auto p-4'>
+        <div className='w-full overflow-auto p-4'>
             {/* mainHeader */}
             <section className='flex'>
                 <div>
@@ -36,39 +36,30 @@ const Home = () => {
                 <Carousel type={type} apiKey={apiKey} />
             </section>
 
-            <h1 className='text-4xl font-bold mt-10 mb-5'>TOP RATED</h1>
-            <ListMovies apiKey={apiKey} type={type} />
+            <h1 className='text-xl sm:text-2xl md:text-4xl font-bold mt-10 mb-5'>TOP RATED</h1>
+            <ListMovies apiKey={apiKey} type={type} which='top_rated' />
+
+            <h1 className='text-xl sm:text-2xl md:text-4xl font-bold mt-10 mb-5'>POPULAR</h1>
+            <ListMovies apiKey={apiKey} type={type} which='popular' />
+
+            {
+                type == 'movie' ?
+                    <>
+                        <h1 className='text-xl sm:text-2xl md:text-4xl font-bold mt-10 mb-5'>COMING SOON</h1>
+                        <ListMovies apiKey={apiKey} type={type} which='upcoming' />
+                    </>
+
+                    :
+                    <>
+                        <h1 className='text-xl sm:text-2xl md:text-4xl font-bold mt-10 mb-5'>AIRING TODAY</h1>
+                        <ListMovies apiKey={apiKey} type={type} which='airing_today' />
+                    </>
+
+
+            }
+
         </div>
     )
 }
-
-
-
-{/* <button
-                type="button"
-                className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                onClick={nextSlide}
-            >
-                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                    <svg
-                        className="w-4 h-4 text-white dark:text-gray-800"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 6 10"
-                    >
-                        <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m1 9 4-4-4-4"
-                        />
-                    </svg>
-                    <span className="sr-only">Next</span>
-                </span>
-            </button> */}
-
-
 
 export default Home
