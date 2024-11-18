@@ -117,7 +117,7 @@ const ListMovies = ({ type, apiKey, which }) => {
     )
 }
 
-const Card = ({ el, which }) => {
+export const Card = ({ el, which }) => {
     const baseImg = 'https://image.tmdb.org/t/p/w200';
     return (
         <>

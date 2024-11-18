@@ -1,19 +1,14 @@
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { useState } from 'react'
 import { motion } from 'framer-motion';
 import Carousel from '../components/Carousel';
 import ListMovies from '../components/ListMovies';
-
+import SearchMovies from '../components/SearchMovies';
 const Home = () => {
     const apiKey = import.meta.env.VITE_API_KEY;
-    const [search, setSerach] = useState('')
-    const [type, setType] = useState('movie')
 
+    const [type, setType] = useState('movie')
     const [isSearchTab, setIsSearchTab] = useState(false)
 
-    const searchBar = (e) => {
-        setSerach(e.target.value)
-    }
     console.log(isSearchTab);
 
     return (
@@ -32,12 +27,10 @@ const Home = () => {
                     </div>
                 </div>
 
+                <button type='button' className='ml-auto w-8 border-2 border-black dark:border-white hover:border-red-500 hover:dark:border-red-500 hover:text-red-500 rounded-3xl shadow-xl hover:border-2 ' onClick={() => setIsSearchTab(true)}><i className="fa-solid fa-magnifying-glass"></i></button>
 
-                <input type="text" onChange={searchBar} value={search} onClick={() => setIsSearchTab(true)} placeholder='Search' className='mx-auto border-2 px-2' />
-
-                <section className={`fixed top-0 left-0 w-full h-3/4 z-40 bg-black/95 ${isSearchTab ? '' : 'hidden'}`}>
-                    <input type="text" value={search} onChange={searchBar} />
-                    <button type='button' onClick={() => setIsSearchTab(false)} className='text-white p-2 bg-slate-300 mx-2'>x</button>
+                <section className={`fixed top-0 left-0 w-full h-full p-4 z-40 bg-black/95 ${isSearchTab ? '' : 'hidden'}`}>
+                    <SearchMovies type={type} setIsSearchTab={setIsSearchTab} apiKey={apiKey} />
                 </section>
             </section>
 
