@@ -3,7 +3,7 @@ import { Card } from './ListMovies';
 import axios from 'axios';
 
 
-const SearchMovies = ({ type, setIsSearchTab, apiKey }) => {
+const SearchMovies = ({ type, setIsSearchTab, apiKey, onMovieSelect }) => {
     const [movies, setMovies] = useState([])
     const [search, setSearch] = useState('')
     const searchBar = (e) => {
@@ -15,7 +15,7 @@ const SearchMovies = ({ type, setIsSearchTab, apiKey }) => {
             const response = await axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${apiKey}&query=${search}&language=it&page=1`)
             const movies = response.data.results
             setMovies(movies)
-            console.log(movies);
+            console.log('ecco la searchbar', movies);
 
 
         } catch (error) {
@@ -38,7 +38,7 @@ const SearchMovies = ({ type, setIsSearchTab, apiKey }) => {
             <div className='flex flex-wrap gap-2 justify-center mt-3 overflow-auto' style={{ height: 'calc(100% - 5rem)' }}>
                 {movies.map(el => {
                     return (
-                        <Card key={el.id} el={el} />
+                        <Card key={el.id} el={el} type={type} onClick={() => onMovieSelect(el)} />
                     )
                 })}
 

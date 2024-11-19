@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-const ListMovies = ({ type, apiKey, which }) => {
+import { motion } from "framer-motion";
+const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
     const [movies, setMovies] = useState([])
     const [firstVisible, setFirstVisible] = useState(0)
     const [lastVisible, setLastVisible] = useState(5)
@@ -11,7 +12,7 @@ const ListMovies = ({ type, apiKey, which }) => {
         try {
             const response = await axios.get(`https://api.themoviedb.org/3/${type}/${which}?api_key=${apiKey}&with_production_countries=US,IT,GB&with_original_language=en&language=it-IT&page=1`)
             const movies = response.data.results
-            // console.log(movies);
+            console.log(movies);
             setMovies(movies)
 
         } catch (error) {
@@ -40,12 +41,17 @@ const ListMovies = ({ type, apiKey, which }) => {
 
     // Funzione per aggiornare 'lastVisible' in base alla larghezza dello schermo
     const updateVisibleCards = () => {
-        if (window.innerWidth < 640) {
+        if (window.innerWidth < 340) {
+            setLastVisible(1);
+        } else if (window.innerWidth < 580) {
             setLastVisible(2);
+        } else if (window.innerWidth < 980) {
+            setLastVisible(3);
         } else {
-            setLastVisible(5);
+            setLastVisible(5)
         }
     };
+
 
     useEffect(() => {
         updateVisibleCards();
@@ -81,11 +87,11 @@ const ListMovies = ({ type, apiKey, which }) => {
                         </svg>
                     </span>
                 </button>
-                {movies.filter((movie, index) => visible(index)).map(el => {
+                {movies.filter((_, index) => visible(index)).map(el => {
                     return type == 'movie' ? (
-                        <Card key={el.id} el={el} which={which} />
+                        <Card key={el.id} el={el} type={type} which={which} onClick={() => onMovieSelect(el)} />
                     ) : (
-                        <Card key={el.id} el={el} which={which} />
+                        <Card key={el.id} el={el} type={type} which={which} onClick={() => onMovieSelect(el)} />
                     );
                 })
                 }
@@ -117,15 +123,59 @@ const ListMovies = ({ type, apiKey, which }) => {
     )
 }
 
-export const Card = ({ el, which }) => {
+export const Card = ({ el, which, type, onClick }) => {
     const baseImg = 'https://image.tmdb.org/t/p/w200';
+
+    //Troncamento a una cifra decimale
+    const truncated = parseFloat(el.vote_average.toFixed(1));
+    //Arrotondamento a 0.5 o all'intero successivo
+    const rounded = Math.round(truncated * 2) / 2;
+    //Numero di stelle piene
+    const fullStars = Math.floor(rounded) / 2;
+    // Mezza stella
+    const hasHalfStar = rounded % 1 !== 0;
+
     return (
         <>
             <div className='relative'>
-                <figure className='h-full mx-1 rounded-xl overflow-hidden shadow-2xl'>
+                <figure onClick={onClick} className='relative h-full mx-1 rounded-xl overflow-hidden shadow-2xl cursor-pointer'>
                     <img src={`${baseImg}${el.poster_path}`} className='h-full w-full object-cover' alt="" />
+                    {type == 'movie' ?
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileHover={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            className='absolute flex flex-col top-0 left-0 h-full w-full px-2 py-1 text-white text-center bg-black/80'
+                        >
+                            <h1 className='text-2xl'>{el.title}</h1>
+                            <p className='text-start'>lang: {el.original_language}</p>
+                            <div className='mt-auto'>
+                                {/* Stelle piene */}
+                                {Array.from({ length: fullStars }, (_, i) => (
+                                    <i key={i} className="fa-solid fa-star text-yellow-300"></i>
+                                ))}
+                                {hasHalfStar && <i className="fa-solid fa-star-half text-yellow-300"></i>}
+                            </div>
+                        </motion.div>
+                        :
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileHover={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            className='absolute flex flex-col top-0 left-0 h-full w-full px-2 py-1 text-white text-center bg-black/80'
+                        >
+                            <h1 className='text-2xl'>{el.name}</h1>
+                            <p className='text-start'>lang: {el.original_language}</p>
+                            <div className='mt-auto'>
+                                {/* Stelle piene */}
+                                {Array.from({ length: fullStars }, (_, i) => (
+                                    <i key={i} className="fa-solid fa-star text-yellow-300"></i>
+                                ))}
+                                {hasHalfStar && <i className="fa-solid fa-star-half text-yellow-300"></i>}
+                            </div>
+                        </motion.div>
+                    }
                 </figure>
-                <p className={`absolute -bottom-3 -left-2 p-1 bg-black rounded-full ${which === 'top_rated' ? '' : 'hidden'}`}>{parseFloat(el.vote_average.toFixed(1))}</p>
             </div>
         </>
     )
