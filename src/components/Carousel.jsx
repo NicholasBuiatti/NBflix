@@ -15,7 +15,7 @@ const Carousel = ({ type, apiKey }) => {
         try {
             const response = await axios.get(`https://api.themoviedb.org/3/discover/${type}?api_key=${apiKey}&with_production_countries=US,IT,GB&with_original_language=en&language=it-IT&page=1`)
             const movies = response.data.results
-            console.log(movies);
+            // console.log(movies);
             setForegroundMovies(movies)
 
         } catch (error) {

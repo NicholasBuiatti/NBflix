@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import PropTypes from 'prop-types';
 
 const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
@@ -69,7 +69,7 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
                     className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
                     onClick={back} disabled={firstVisible === 0}
                 >
-                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/50 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/50 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 ">
                         <svg
                             className="w-4 h-4 text-white rotate-180"
                             aria-hidden="true"
@@ -100,7 +100,7 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
                     className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
                     onClick={next} disabled={lastVisible === movies.length - 1}
                 >
-                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/50 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/50 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60">
                         <svg
                             className="w-4 h-4 text-white"
                             aria-hidden="true"
@@ -149,7 +149,8 @@ export const Card = ({ el, type, onClick }) => {
                             className='absolute flex flex-col top-0 left-0 h-full w-full px-2 py-1 text-white text-center bg-black/80'
                         >
                             <h1 className='text-2xl'>{el.title}</h1>
-                            <p className='text-start'>lang: {el.original_language}</p>
+                            <p className='text-start'>lingua: {el.original_language}</p>
+
                             <div className='mt-auto'>
                                 {/* Stelle piene */}
                                 {Array.from({ length: fullStars }, (_, i) => (
@@ -157,6 +158,9 @@ export const Card = ({ el, type, onClick }) => {
                                 ))}
                                 {hasHalfStar && <i className="fa-solid fa-star-half text-yellow-300"></i>}
                             </div>
+                            <button className='rounded-full w-10 p-1 mx-auto mt-2 bg-gray-500/50 hover:bg-gray-400/50'>
+                                <i className="fa-solid fa-plus text-xl"></i>
+                            </button>
                         </motion.div>
                         :
                         <motion.div
@@ -166,7 +170,7 @@ export const Card = ({ el, type, onClick }) => {
                             className='absolute flex flex-col top-0 left-0 h-full w-full px-2 py-1 text-white text-center bg-black/80'
                         >
                             <h1 className='text-2xl'>{el.name}</h1>
-                            <p className='text-start'>lang: {el.original_language}</p>
+                            <p className='text-start'>Lingua: {el.original_language}</p>
                             <div className='mt-auto'>
                                 {/* Stelle piene */}
                                 {Array.from({ length: fullStars }, (_, i) => (
@@ -174,6 +178,9 @@ export const Card = ({ el, type, onClick }) => {
                                 ))}
                                 {hasHalfStar && <i className="fa-solid fa-star-half text-yellow-300"></i>}
                             </div>
+                            <button className='rounded-full w-10 p-1 mx-auto mt-2 bg-gray-500/50 hover:bg-gray-400/50'>
+                                <i className="fa-solid fa-plus text-xl"></i>
+                            </button>
                         </motion.div>
                     }
                 </figure>
