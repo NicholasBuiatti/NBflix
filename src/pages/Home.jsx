@@ -12,12 +12,10 @@ const Home = () => {
     const [selectedMovie, setSelectedMovie] = useState(null);
 
     const handleMovieSelect = (movie) => {
-        setSelectedMovie(movie); // Salva il film selezionato nello stato
+        setSelectedMovie(movie);
     };
 
-    const closeDetails = () => {
-        setSelectedMovie(null); // Chiude la finestra dei dettagli
-    };
+
 
     return (
         <div className='relative w-full overflow-auto p-4'>
@@ -37,9 +35,35 @@ const Home = () => {
 
                 <button type='button' className='ml-auto w-8 border-2 border-black dark:border-white hover:border-red-500 hover:dark:border-red-500 hover:text-red-500 rounded-3xl shadow-xl hover:border-2 ' onClick={() => setIsSearchTab(true)}><i className="fa-solid fa-magnifying-glass"></i></button>
 
-                <section className={`fixed top-0 left-0 w-full h-full p-4 z-40 bg-black/95 ${isSearchTab ? '' : 'hidden'}`}>
-                    <SearchMovies type={type} setIsSearchTab={setIsSearchTab} apiKey={apiKey} onMovieSelect={handleMovieSelect} />
-                </section>
+                {isSearchTab &&
+                    <motion.div
+                        initial={{
+                            width: "0px",
+                            height: "0px",
+                            top: "5px",
+                            right: "5px",
+                        }}
+                        animate={{
+                            width: isSearchTab ? "100vw" : "0px",
+                            height: isSearchTab ? "100vh" : "0px",
+                            opacity: isSearchTab ? 1 : 0,
+                            top: isSearchTab ? "0" : "5px",
+                            right: isSearchTab ? "0" : "5px",
+                        }}
+                        transition={{
+                            duration: 0.5,
+                            ease: "easeInOut",
+                        }}
+                        className={`fixed p-4 z-40 bg-black/95`}>
+
+                        <SearchMovies
+                            type={type}
+                            setIsSearchTab={setIsSearchTab}
+                            apiKey={apiKey}
+                            onMovieSelect={handleMovieSelect}
+                        />
+                    </motion.div>
+                }
             </section>
 
 
@@ -47,7 +71,7 @@ const Home = () => {
 
             {/* Mostra i dettagli se un film è selezionato */}
             {selectedMovie && (
-                <MovieDetails movie={selectedMovie} type={type} onClose={closeDetails} />
+                <MovieDetails movie={selectedMovie} setMovie={setSelectedMovie} type={type} />
 
             )}
 

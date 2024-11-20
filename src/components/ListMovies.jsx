@@ -126,6 +126,7 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
 export const Card = ({ el, which, type, onClick }) => {
     const baseImg = 'https://image.tmdb.org/t/p/w200';
 
+    // funzione per avere le un array su cui ciclare per avere le stelle come valutazione 
     //Troncamento a una cifra decimale
     const truncated = parseFloat(el.vote_average.toFixed(1));
     //Arrotondamento a 0.5 o all'intero successivo
