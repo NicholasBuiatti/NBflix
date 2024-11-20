@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { motion } from "framer-motion";
+import PropTypes from 'prop-types';
+
 const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
     const [movies, setMovies] = useState([])
     const [firstVisible, setFirstVisible] = useState(0)
     const [lastVisible, setLastVisible] = useState(5)
 
-
-
     const getMovies = async () => {
         try {
             const response = await axios.get(`https://api.themoviedb.org/3/${type}/${which}?api_key=${apiKey}&with_production_countries=US,IT,GB&with_original_language=en&language=it-IT&page=1`)
             const movies = response.data.results
-            console.log(movies);
+            // console.log(movies);
             setMovies(movies)
 
         } catch (error) {
@@ -123,7 +123,7 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
     )
 }
 
-export const Card = ({ el, which, type, onClick }) => {
+export const Card = ({ el, type, onClick }) => {
     const baseImg = 'https://image.tmdb.org/t/p/w200';
 
     // funzione per avere le un array su cui ciclare per avere le stelle come valutazione 
@@ -181,5 +181,29 @@ export const Card = ({ el, which, type, onClick }) => {
         </>
     )
 }
+
+ListMovies.propTypes = {
+    type: PropTypes.string.isRequired,
+    apiKey: PropTypes.string.isRequired,
+    which: PropTypes.string.isRequired,
+    onMovieSelect: PropTypes.func.isRequired,
+};
+
+Card.propTypes = {
+    el: PropTypes.shape({
+        poster_path: PropTypes.string,
+        vote_average: PropTypes.number,
+        backdrop_path: PropTypes.string,
+        title: PropTypes.string,
+        name: PropTypes.string,
+        original_language: PropTypes.string,
+        release_date: PropTypes.string,
+        first_air_date: PropTypes.string,
+        overview: PropTypes.string,
+    }).isRequired,
+    which: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+};
 
 export default ListMovies
