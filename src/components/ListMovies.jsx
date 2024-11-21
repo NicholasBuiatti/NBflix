@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import PropTypes from 'prop-types';
 
 const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
     const [movies, setMovies] = useState([])
     const [firstVisible, setFirstVisible] = useState(0)
-    const [lastVisible, setLastVisible] = useState(5)
-
+    const [lastVisible, setLastVisible] = useState(6)
+    const [isAnimating, setIsAnimating] = useState(false);
     const getMovies = async () => {
         try {
             const response = await axios.get(`https://api.themoviedb.org/3/${type}/${which}?api_key=${apiKey}&with_production_countries=US,IT,GB&with_original_language=en&language=it-IT&page=1`)
@@ -35,8 +35,12 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
     }
 
     const next = () => {
-        setLastVisible((prevLastVisible) => prevLastVisible + 1)
-        setFirstVisible((prevFirstVisible) => prevFirstVisible + 1)
+        setIsAnimating(true)
+        setTimeout(() => {
+            setFirstVisible((prevFirstVisible) => prevFirstVisible + 1)
+            setLastVisible((prevLastVisible) => prevLastVisible + 1)
+            setIsAnimating(false)
+        }, 1000)
     }
 
     // Funzione per aggiornare 'lastVisible' in base alla larghezza dello schermo
@@ -48,7 +52,7 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
         } else if (window.innerWidth < 980) {
             setLastVisible(3);
         } else {
-            setLastVisible(5)
+            setLastVisible(6)
         }
     };
 
@@ -63,7 +67,7 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
 
     return (
         <>
-            <div className='flex relative'>
+            <div className='overflow-hidden relative'>
                 <button
                     type="button"
                     className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
@@ -87,14 +91,27 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
                         </svg>
                     </span>
                 </button>
-                {movies.filter((_, index) => visible(index)).map(el => {
-                    return type == 'movie' ? (
-                        <Card key={el.id} el={el} type={type} which={which} onClick={() => onMovieSelect(el)} />
-                    ) : (
-                        <Card key={el.id} el={el} type={type} which={which} onClick={() => onMovieSelect(el)} />
-                    );
-                })
-                }
+                <div className="flex w-full">
+                    {movies
+                        .filter((_, index) => visible(index))
+                        .map((el, index) => (
+                            <motion.div
+                                key={el.id}
+                                initial={{ width: 'auto' }}
+                                animate={{ width: index == 0 && isAnimating ? '0%' : 'auto' }}
+                                transition={{ duration: 0.5 }}
+                                className='flex'
+                            >
+                                <Card
+                                    el={el}
+                                    type={type}
+                                    which={which}
+                                    onClick={() => onMovieSelect(el)}
+                                />
+                            </motion.div>
+                        ))}
+                </div>
+
                 <button
                     type="button"
                     className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
@@ -138,7 +155,7 @@ export const Card = ({ el, type, onClick }) => {
 
     return (
         <>
-            <div className='relative'>
+            <div className='relative w-52'>
                 <figure onClick={onClick} className='relative h-full mx-1 rounded-xl overflow-hidden shadow-2xl cursor-pointer'>
                     <img src={`${baseImg}${el.poster_path}`} className='h-full w-full object-cover' alt="" />
                     {type == 'movie' ?
