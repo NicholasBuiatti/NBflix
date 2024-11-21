@@ -8,6 +8,8 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
     const [firstVisible, setFirstVisible] = useState(0)
     const [lastVisible, setLastVisible] = useState(6)
     const [isAnimating, setIsAnimating] = useState(false);
+    const [isReverseAnimating, setIsReverseAnimating] = useState(false);
+
     const getMovies = async () => {
         try {
             const response = await axios.get(`https://api.themoviedb.org/3/${type}/${which}?api_key=${apiKey}&with_production_countries=US,IT,GB&with_original_language=en&language=it-IT&page=1`)
@@ -29,18 +31,23 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
         return indice >= firstVisible && indice <= lastVisible;
     }
 
-    const back = () => {
-        setLastVisible((prevLastVisible) => prevLastVisible - 1)
-        setFirstVisible((prevFirstVisible) => prevFirstVisible - 1)
-    }
-
     const next = () => {
         setIsAnimating(true)
         setTimeout(() => {
-            setFirstVisible((prevFirstVisible) => prevFirstVisible + 1)
             setLastVisible((prevLastVisible) => prevLastVisible + 1)
+            setFirstVisible((prevFirstVisible) => prevFirstVisible + 1)
             setIsAnimating(false)
-        }, 1000)
+        }, 200)
+    }
+
+    const back = () => {
+        setIsReverseAnimating(true)
+        setLastVisible((prevLastVisible) => prevLastVisible - 1)
+        setFirstVisible((prevFirstVisible) => prevFirstVisible - 1)
+
+        setTimeout(() => {
+            setIsReverseAnimating(false)
+        }, 200)
     }
 
     // Funzione per aggiornare 'lastVisible' in base alla larghezza dello schermo
@@ -97,9 +104,12 @@ const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
                         .map((el, index) => (
                             <motion.div
                                 key={el.id}
-                                initial={{ width: 'auto' }}
-                                animate={{ width: index == 0 && isAnimating ? '0%' : 'auto' }}
-                                transition={{ duration: 0.5 }}
+                                initial={{ width: (index === 0 && isReverseAnimating) ? '0%' : 'auto' }}
+                                animate={{
+                                    width: (index === 0 && isAnimating)
+                                        ? '0%' : 'auto'
+                                }}
+                                transition={{ duration: 0.2 }}
                                 className='flex'
                             >
                                 <Card
