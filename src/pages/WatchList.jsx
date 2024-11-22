@@ -13,7 +13,7 @@ const WatchList = () => {
     }, []);
 
     return (
-        <>
+        <div className="overflow-auto h-full">
             {/* Header Section */}
             <div className="py-8 text-center w-full">
                 <h1 className="text-5xl font-bold text-red-600 mb-4">Film Salvati</h1>
@@ -49,7 +49,7 @@ const WatchList = () => {
                 }
             </div>
 
-        </>
+        </div>
     );
 };
 export default WatchList
