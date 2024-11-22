@@ -1,29 +1,55 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useGlobalStore } from '../store';
 import PropTypes from 'prop-types';
+
 function MovieDetails({ movie, setMovie, type }) {
     const baseImg = 'https://image.tmdb.org/t/p/w1280';
     const [isOpen, setIsOpen] = useState(true);
+    const [isChangeButton, setIsChangeButton] = useState(false)
+    //DESTRUTTURO L'HOOK PERSONALIZZATO PER PRENDERE ITEMS E LA FUNZIONE ADDITEMS
+    const { items, addItem, removeItem, reloadFromLocalStorage } = useGlobalStore();
 
-    // manipolazione numero del voto per poter creare un array e successivamente ciclare per formare le stelle
+    // CONTROLLA SE IL FILM è SALVATO GIà NELLO STORAGE
+    useEffect(() => {
+        reloadFromLocalStorage()
+        if (items.some(item => item.id === movie.id)) {
+            setIsChangeButton(true)
+        } else {
+            setIsChangeButton(false);
+        }
+    }, [items, movie])
+
+    // MANIPOLAZIONE VOTO PER CREARE UN ARRAY CHE POSSO TRASFORMARE IN STELLE
     const truncated = parseFloat(movie.vote_average.toFixed(1));
     const rounded = Math.round(truncated * 2) / 2;
     const fullStars = Math.floor(rounded) / 2;
     const hasHalfStar = rounded % 1 !== 0;
 
-    // funzione per invertire la data
+    // FUNZIONE BASE PER INVERTIRE LA DATA
     function invertDate(date) {
         const parts = date.split("-");
         const inverted = `${parts[2]}-${parts[1]}-${parts[0]}`;
         return inverted;
     }
 
-
     const closeDetails = () => {
-        setIsOpen(false); // Imposta stato per l'animazione di chiusura
-        setTimeout(() => {
-            setMovie(null); // Resetta `movie` solo dopo l'animazione
+        setIsOpen(false);
+        setTimeout(() => { //SETTIMEOUT PER ASPETTARE LA FINE DELL'ANIMAZIONE
+            setMovie(null);
         }, 1000);
+    };
+
+    const addWatchList = () => {
+        if (!items.includes(movie)) {
+            addItem(movie); //AGGIUNGI IL FILM ALLO STORAGE PRENDENDO LA FUNZIONE DLL'HOOK PERSONALIZZATO
+            console.log('film aggiunto', items);
+        }
+
+    }
+    const handleRemoveItem = (movieId) => {
+        removeItem(movieId); // RIMUOVI L'ELEMENTO CONFRONTANDO IL MOVIE.ID
+        reloadFromLocalStorage();
     };
 
     return (
@@ -97,6 +123,16 @@ function MovieDetails({ movie, setMovie, type }) {
                             </p>
 
 
+                    }
+                    {
+                        isChangeButton ?
+                            <button onClick={() => handleRemoveItem(movie.id)} className='rounded-full w-10 p-1 mx-auto mt-2 bg-red-500/80 hover:bg-red-400/80'>
+                                <i className="fa-solid fa-minus"></i>
+                            </button>
+                            :
+                            <button onClick={addWatchList} className='rounded-full w-10 p-1 mx-auto mt-2 bg-red-500/80 hover:bg-red-400/80'>
+                                <i className="fa-solid fa-plus text-xl"></i>
+                            </button>
                     }
                 </div>
             }

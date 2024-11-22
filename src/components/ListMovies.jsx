@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { motion } from "framer-motion";
 import PropTypes from 'prop-types';
-
 const ListMovies = ({ type, apiKey, which, onMovieSelect }) => {
     const [movies, setMovies] = useState([])
     const [firstVisible, setFirstVisible] = useState(0)
@@ -163,6 +162,8 @@ export const Card = ({ el, type, onClick }) => {
     // Mezza stella
     const hasHalfStar = rounded % 1 !== 0;
 
+
+
     return (
         <>
             <div className='relative w-52'>
@@ -185,30 +186,28 @@ export const Card = ({ el, type, onClick }) => {
                                 ))}
                                 {hasHalfStar && <i className="fa-solid fa-star-half text-yellow-300"></i>}
                             </div>
-                            <button className='rounded-full w-10 p-1 mx-auto mt-2 bg-gray-500/50 hover:bg-gray-400/50'>
-                                <i className="fa-solid fa-plus text-xl"></i>
-                            </button>
                         </motion.div>
                         :
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            whileHover={{ opacity: 1 }}
-                            transition={{ duration: 0.5 }}
-                            className='absolute flex flex-col top-0 left-0 h-full w-full px-2 py-1 text-white text-center bg-black/80'
-                        >
-                            <h1 className='text-2xl'>{el.name}</h1>
-                            <p className='text-start'>Lingua: {el.original_language}</p>
-                            <div className='mt-auto'>
-                                {/* Stelle piene */}
-                                {Array.from({ length: fullStars }, (_, i) => (
-                                    <i key={i} className="fa-solid fa-star text-yellow-300"></i>
-                                ))}
-                                {hasHalfStar && <i className="fa-solid fa-star-half text-yellow-300"></i>}
-                            </div>
-                            <button className='rounded-full w-10 p-1 mx-auto mt-2 bg-gray-500/50 hover:bg-gray-400/50'>
-                                <i className="fa-solid fa-plus text-xl"></i>
-                            </button>
-                        </motion.div>
+                        <>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                whileHover={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className='absolute flex flex-col top-0 left-0 h-full w-full px-2 py-1 text-white text-center bg-black/80'
+                            >
+                                <h1 className='text-2xl'>{el.name}</h1>
+                                <p className='text-start'>Lingua: {el.original_language}</p>
+                                <div className='mt-auto'>
+                                    {/* Stelle piene */}
+                                    {Array.from({ length: fullStars }, (_, i) => (
+                                        <i key={i} className="fa-solid fa-star text-yellow-300"></i>
+                                    ))}
+                                    {hasHalfStar && <i className="fa-solid fa-star-half text-yellow-300"></i>}
+                                </div>
+                            </motion.div>
+
+                        </>
+
                     }
                 </figure>
             </div>
