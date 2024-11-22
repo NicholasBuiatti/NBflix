@@ -10,7 +10,7 @@ function App() {
     <>
       <Router>
         <Navbar />
-        <div className="flex h-[calc(100vh-3rem)] md:h-full md:w-10/12 max-w-screen-xl">
+        <div className="h-[calc(100vh-3rem)] md:h-full md:w-10/12 max-w-screen-xl">
           <AppRouter />
         </div>
       </Router>

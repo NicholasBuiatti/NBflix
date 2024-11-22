@@ -18,7 +18,7 @@ const Home = () => {
 
 
     return (
-        <div className='relative w-full overflow-auto p-4'>
+        <div className='relative w-full h-full overflow-auto p-4'>
             {/* mainHeader */}
             <section className='flex'>
 

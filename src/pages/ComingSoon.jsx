@@ -6,7 +6,7 @@ import axios from 'axios'
 const ComingSoon = () => {
 
     return (
-        <div className='w-full'>
+        <div className='w-full h-full'>
             <figure className='h-full w-full relative'>
                 <img src={Sfondo} className='absolute object-cover object-bottom h-full w-full ' alt="" />
                 <div className="absolute flex flex-col items-center text-center w-full h-full space-y-4 py-8 bg-gray-900/70 text-white">
